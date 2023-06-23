@@ -75,4 +75,6 @@ Ensure you have the following installed on your local machine:
 
 Now, your application should be running at `localhost:3000`.
 
-Note: Ensure the Django server is running at the same time as the React application for the system to function properly.
+Note:
+- The Django server should be running at the same time as the React application for the system to function properly.
+- The application uses the email field instead of the username field for user identification.
