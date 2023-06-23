@@ -1,48 +1,32 @@
-import React, { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { axiosInstance } from '../../api/apiConfig'
 
 export default function Register() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
-    const [username, setUsername] = useState()
-    const [passwordConfirmation, setPasswordConfirmation] = useState()
+    const first_name = useRef()
+    const last_name = useRef()
+    const email = useRef()
+    const password = useRef()
+    const password2 = useRef(undefined)
 
-    function onEmailChange(event) {
-        setEmail(event.target.value)
-    }
-
-    function onPasswordChange(event) {
-        setPassword(event.target.value)
-    }
-
-    function onUsernameChange(event) {
-        setUsername(event.target.value)
-    }
-
-    function onPasswordConfirmationChange(event) {
-        setPasswordConfirmation(event.target.value)
-    }
 
     async function onSubmitForm(event) {
         event.preventDefault()
+        const data = {
+            first_name: first_name.current.value,
+            last_name: last_name.current.value,
+            email: email.current.value,
+            password: password.current.value,
+            password2: password2.current.value
+          };
 
         setLoading(true)
 
         try {
-            const response = await axiosInstance.post('auth/register', JSON.stringify({
-                username,
-                email,
-                password,
-                password2: passwordConfirmation
-            }))
+            const response = await axiosInstance.post('auth/register', JSON.stringify(data))
 
-            setEmail()
-            setPassword()
-            setUsername()
-            setPasswordConfirmation()
             setLoading(false)
 
             navigate('/auth/login')
@@ -57,16 +41,19 @@ export default function Register() {
             <h2>Register</h2>
             <form onSubmit={onSubmitForm}>
                 <div className="mb-3">
-                    <input type="text" placeholder='Username' autoComplete='off' className='form-control' id='username' onChange={onUsernameChange} />
+                    <input type="text" placeholder='First Name' autoComplete='off' className='form-control' id='first_name' ref={first_name} />
                 </div>
                 <div className="mb-3">
-                    <input type="email" placeholder='Email' autoComplete='off' className='form-control' id="email" onChange={onEmailChange} />
+                    <input type="text" placeholder='Last Name' autoComplete='off' className='form-control' id='last_name' ref={last_name} />
                 </div>
                 <div className="mb-3">
-                    <input type="password" placeholder='Password' autoComplete='off' className='form-control' id="password" onChange={onPasswordChange} />
+                    <input type="email" placeholder='Email' autoComplete='off' className='form-control' id="email" ref={email} />
                 </div>
                 <div className="mb-3">
-                    <input type="password" placeholder='Confirm Password' autoComplete='off' className='form-control' id="passwordConfirmation" onChange={onPasswordConfirmationChange} />
+                    <input type="password" placeholder='Password' autoComplete='off' className='form-control' id="password" ref={password} />
+                </div>
+                <div className="mb-3">
+                    <input type="password" placeholder='Confirm Password' autoComplete='off' className='form-control' id="passwordConfirmation" ref={password2} />
                 </div>
                 <div className="mb-3">
                     <button disabled={loading} className='btn btn-success' type="submit">Login</button>
